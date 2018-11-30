@@ -1,0 +1,6 @@
+[package]
+name = "ieee_sb_passau_advent_2018"
+version = "0.1.0"
+authors = ["Christoph Rist <christoph_bernd.rist@daimler.com>"]
+
+[dependencies]
