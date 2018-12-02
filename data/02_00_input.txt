@@ -1,0 +1,22 @@
+Anna
++ Paula
++ Dani
+
+Paula
++ Anna
+- Lotta
+
+Dani
++ Paula
+- Steffi
+
+Lotta
++ Steffi
+
+Steffi
+- Paula
+- Dani
+
+Cleo
+
+Jo
