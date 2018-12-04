@@ -30,7 +30,7 @@ fn add_new(name: &String, rooms: &mut Vec<Room>) -> Result<usize, bool> {
 }
 
 fn add_plus(name: &str, room: usize, rooms: &mut Vec<Room>) -> Result<usize, bool> {
-    
+
     if rooms[room].unpopular.contains(name) {
         return Err(false);
     }
@@ -69,15 +69,28 @@ fn merge(rooms: &mut Vec<Room>, a: usize, b: usize) -> usize {
     let into = std::cmp::min(a, b);
     let from = std::cmp::max(a, b);
 
+//    {
+//        let (rooms_start, rooms_end) = rooms.split_at_mut(from);
+//        let mut r = &rooms_end[0];
+//        let mut res = &r.residents;
+//        rooms_start[into].residents.extend(res.into_iter())
+//        //let s = rooms_end[0].residents;
+//        //rooms_start[into].residents.extend(&rooms_end[0].residents);
+//    }
+
     // ???? iter, struct, into_iter???
     //rooms[a].residents.extend(&rooms[b].residents.iter());
     //let &mut res = &rooms[a].residents;
     // ???? cannot use reference, need copy
-    let s = rooms[from].residents.clone();
-    rooms[into].residents.extend(s);
+    // split_at_mut
+//    let s = rooms[from].residents.clone();
+//    rooms[into].residents.extend(s);
+//    rooms[into].residents.extend(rooms[from].residents.clone());
+//
+//    let u = rooms[from].unpopular.clone();
+//    rooms[into].unpopular.extend(u);
 
-    let u = rooms[from].unpopular.clone();
-    rooms[into].unpopular.extend(u);
+    // remove merged-from room
     rooms.remove(from);
     into
 }
@@ -121,19 +134,19 @@ fn main() {
 
     let mut rooms = Vec::new();
 
-    let mut x: Option<usize> = None;
+    let mut current_room: Option<usize> = None;
     for line in iterator {
         let s = line.unwrap();
 
         let success = match s.chars().next() {
-            Some('+') => add_plus(&s[2..], x.unwrap(), &mut rooms),
-            Some('-') => add_minus(&s[2..], x.unwrap(), &mut rooms),
+            Some('+') => add_plus(&s[2..], current_room.unwrap(), &mut rooms),
+            Some('-') => add_minus(&s[2..], current_room.unwrap(), &mut rooms),
             Some(_)   => add_new(&s, &mut rooms),
-            None      => { x = None; continue; },
+            None      => { current_room = None; continue; },
         };
 
         match success {
-            Ok(v) => {x = Some(v);},
+            Ok(v) => {current_room = Some(v);},
             Err(_e) => {
                 println!("hallelujah");
                 return;
