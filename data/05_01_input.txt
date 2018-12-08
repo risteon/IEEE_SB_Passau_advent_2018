@@ -1,0 +1,2 @@
+Ball, 30
+Pluesch-Einhorn, 50
