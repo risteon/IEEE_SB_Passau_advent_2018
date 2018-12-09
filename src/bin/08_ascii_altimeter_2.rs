@@ -20,7 +20,7 @@ fn main() {
             _ => panic!("invalid input"),
         };
     }
-    
+
     let ch:Vec<char> = line.chars().collect();
     let h = height.iter().max().unwrap().clone();
     for i in 0u32..h+1 {
