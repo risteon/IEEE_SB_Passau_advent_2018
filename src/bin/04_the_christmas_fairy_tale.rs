@@ -36,34 +36,42 @@ fn main() {
         stdin.lock().read_to_string(&mut line).ok();
         line
     };
-    // get occurences of ascii characters
-    let mut p = [0u32; 26];
-    for c in line.chars() {
-        if c.is_ascii_lowercase() {
-            p[c as usize - 'a' as usize] += 1;
+    // get occurrences of ascii characters
+    let p = {
+        let mut p = [0u32; 26];
+        for c in line.chars() {
+            if c.is_ascii_lowercase() {
+                p[c as usize - 'a' as usize] += 1;
+            } else if c.is_ascii_uppercase() {
+                p[c as usize - 'A' as usize] += 1;
+            }
         }
-        else if c.is_ascii_uppercase() {
-            p[c as usize - 'A' as usize] += 1;
-        }
-    }
+        p
+    };
     // calculate correlation of prob with p
-    let mut v = [0.0; 26];
-    for i in 0..v.len() {
-        let head = &prob[..i];
-        let tail = &prob[i..];
-        v[i] = p.iter().cloned()
-            .zip(tail.iter().cloned().chain(head.iter().cloned()))
-            .map(|(x, y)| x as f64 * y).sum();
-    }
-    // get maximum of correlation
-    let mut max_value = 0.0;
-    let mut shift = 0usize;
-    for (i, value) in v.iter().cloned().enumerate() {
-        if value > max_value {
-            max_value = value;
-            shift = i;
+    let corr = {
+        let mut corr = [0.0; 26];
+        for i in 0..corr.len() {
+            let head = &prob[..i];
+            let tail = &prob[i..];
+            corr[i] = p.iter().cloned()
+                .zip(tail.iter().cloned().chain(head.iter().cloned()))
+                .map(|(x, y)| x as f64 * y).sum();
         }
-    }
+        corr
+    };
+    // get maximum of correlation
+    let shift = {
+        let mut max_value = 0.0;
+        let mut shift = 0usize;
+        for (i, value) in corr.iter().cloned().enumerate() {
+            if value > max_value {
+                max_value = value;
+                shift = i;
+            }
+        }
+        shift
+    };
     // print shifted output
     let mut output = String::with_capacity(line.len());
     for c in line.chars() {
